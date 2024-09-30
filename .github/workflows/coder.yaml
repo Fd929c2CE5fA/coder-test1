@@ -4,10 +4,14 @@ jobs:
   Deployment:
     runs-on: macos-latest
     steps:
+      - name: brew
+        run: | 
+          brew update
+          brew upgrade
       - name: coder
         env:
           PASSWORD: ${{ secrets.CODER_PASSWORD }}
-        run: | 
+        run: |
           curl -fsSL https://code-server.dev/install.sh | sh
           nohup code-server --disable-telemetry &
       - name: cloudflared
