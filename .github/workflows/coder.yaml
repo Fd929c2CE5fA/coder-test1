@@ -1,0 +1,16 @@
+name: coder-debug
+on: workflow_dispatch
+jobs:
+  Deployment:
+    runs-on: macos-latest
+    steps:
+      - name: coder
+        env:
+          PASSWORD: ${{ secrets.CODER_PASSWORD }}
+        run: | 
+          curl -fsSL https://code-server.dev/install.sh | sh
+          nohup code-server --disable-telemetry &
+      - name: cloudflared
+        run: |
+          brew install cloudflared
+          cloudflared tunnel --url http://localhost:8080
