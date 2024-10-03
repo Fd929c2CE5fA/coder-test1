@@ -35,8 +35,8 @@ jobs:
     steps:
       - name: apt
         run: | 
-          apt update
-          apt upgrade
+          sudo apt-get update
+          sudo apt-get upgrade
       - name: coder
         env:
           PASSWORD: ${{ secrets.CODER_PASSWORD }}
@@ -45,5 +45,5 @@ jobs:
           nohup code-server --disable-telemetry &
       - name: cloudflared
         run: |
-          apt install cloudflared
+          sudo apt-get install cloudflared
           cloudflared tunnel --url http://localhost:8080
