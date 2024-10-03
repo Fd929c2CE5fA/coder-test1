@@ -1,7 +1,18 @@
 name: coder-debug
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'Runner Image'
+        required: true
+        default: 'macos'
+        type: choice
+        options:
+          - macos
+          - linux
 jobs:
-  Deployment:
+  debug-macos:
+    if: ${{ inputs.image == 'macos' }}
     runs-on: macos-latest
     steps:
       - name: brew
@@ -17,4 +28,22 @@ jobs:
       - name: cloudflared
         run: |
           brew install cloudflared
+          cloudflared tunnel --url http://localhost:8080
+  debug-linux:
+    if: ${{ inputs.image == 'linux' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: apt
+        run: | 
+          apt update
+          apt upgrade
+      - name: coder
+        env:
+          PASSWORD: ${{ secrets.CODER_PASSWORD }}
+        run: |
+          curl -fsSL https://code-server.dev/install.sh | sh
+          nohup code-server --disable-telemetry &
+      - name: cloudflared
+        run: |
+          apt install cloudflared
           cloudflared tunnel --url http://localhost:8080
