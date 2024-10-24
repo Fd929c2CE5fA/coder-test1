@@ -26,8 +26,6 @@ jobs:
           curl -fsSL https://code-server.dev/install.sh | sh
           nohup code-server --disable-telemetry &
       - name: cloudflared
-        env:
-          TUNNEL_RETRIES: 1
         run: |
           brew install cloudflared
           cloudflared tunnel --url http://localhost:8080
@@ -46,8 +44,6 @@ jobs:
           curl -fsSL https://code-server.dev/install.sh | sh
           nohup code-server --disable-telemetry &
       - name: cloudflared
-        env:
-          TUNNEL_RETRIES: 1
         run: |
           sudo mkdir -p --mode=0755 /usr/share/keyrings
           curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
